@@ -1,0 +1,19 @@
+Potential queries for final project:
+
+1. List all athletes in the club
+2. list all coaches in the club
+3. list all teams in the club
+4. list athletes anc coaches in a specific team
+4. list athletes in a certain age range
+5. list athletes where not in a team
+6. add athlete
+7. add athlete to team
+8. add coach
+9. add coach to team
+10. update athlete information
+11. update team information
+12. update coach information
+13. update team information
+14. display count of athletes on team
+15. display count of athletes in club
+16. list athletes where on a team above their actual age (playing up)

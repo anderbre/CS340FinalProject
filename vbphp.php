@@ -3,10 +3,15 @@
 ini_set('display_errors', 'On');
 //Connects to the database
 
+//$dbhost = 'oniddb.cws.oregonstate.edu';
+//$dbname = 'mcmurroj-db';
+//$dbuser = 'mcmurroj-db';
+//$dbpass = 'uHM64jmm6DzuW1qr';
+
 $dbhost = 'oniddb.cws.oregonstate.edu';
-$dbname = 'mcmurroj-db';
-$dbuser = 'mcmurroj-db';
-$dbpass = 'uHM64jmm6DzuW1qr';
+$dbname = 'anderbre-db';
+$dbuser = 'anderbre-db';
+$dbpass = 'mkfCwxMsmsXjCDc7';
 
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){
@@ -28,8 +33,8 @@ if($mysqli->connect_errno){
 <br>
 <h3>About VollyBall</h3>
 
-<p>This is some general information about Vollyball.  
-	Here we can detail positions types, relationship contraints (i.e coaches can coach more than one team...) 
+<p>This is some general information about Vollyball.
+	Here we can detail positions types, relationship contraints (i.e coaches can coach more than one team...)
 </p>
 
 

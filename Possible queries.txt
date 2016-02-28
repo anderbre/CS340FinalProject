@@ -7,9 +7,9 @@ Potential queries for final project:
 4. list athletes in a certain age range
 5. list athletes where not in a team
 6. add athlete
-7. add athlete to team
+7. add athlete to team  --When you add athlete make is so you have to add to team?
 8. add coach
-9. add coach to team
+9. add coach to team  --When you add coach make is so you have to add to team?
 10. update athlete information
 11. update team information
 12. update coach information
@@ -17,3 +17,37 @@ Potential queries for final project:
 14. display count of athletes on team
 15. display count of athletes in club
 16. list athletes where on a team above their actual age (playing up)
+
+
+
+
+-- Two queries I have on the current athletes.php page.
+
+1. Selects althete: first name + last name + age, team: name + age_group, COUNTS how many positions held.  Note: uses aggregate function
+
+SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
+athlete_position ap ON ap.athleteID = a.id INNER JOIN 
+positions p ON p.id = ap.positionID 
+GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group
+
+2. All positions held by each athlete 
+
+SELECT a.first_name, a.last_name, p.type FROM athletes a INNER JOIN athlete_position ap ON
+ap.athleteID = a.id INNER JOIN positions p ON
+p.id = ap.positionID 
+
+
+
+-- Some queries I have ran already/tested, not implemented.
+
+1. Displays coach first name and team they coach for...
+
+SELECT c.first_name, t.name from coaches c Inner Join team_coach_setup tc ON 
+c.id = tc.coachID INNER JOIN teams t ON tc.teamID= t.id
+
+2.  Select coach first name, position on all teams belong to
+
+SELECT c.first_name, t.name, p.type FROM positions p INNER JOIN position_coach_team pct ON p.id = pct.positionID INNER JOIN
+coaches c ON c.id = pct.coachID INNER JOIN teams t ON t.id = pct.teamID
+
+

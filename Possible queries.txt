@@ -7,9 +7,9 @@ Potential queries for final project:
 4. list athletes in a certain age range
 5. list athletes where not in a team
 6. add athlete
-7. add athlete to team  --When you add athlete make is so you have to add to team?
+7. add athlete to team  --When you add athlete make is so you have to add to team? (no, cause athletes will be added at tryouts, before they have a team.
 8. add coach
-9. add coach to team  --When you add coach make is so you have to add to team?
+9. add coach to team  --When you add coach make is so you have to add to team? (no, you don't know their team when you hire them)
 10. update athlete information
 11. update team information
 12. update coach information

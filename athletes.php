@@ -3,15 +3,17 @@
 ini_set('display_errors', 'On');
 //Connects to the database
 
-//$dbhost = 'oniddb.cws.oregonstate.edu';
-//$dbname = 'mcmurroj-db';
-//$dbuser = 'mcmurroj-db';
-//$dbpass = 'uHM64jmm6DzuW1qr';
-
-$dbhost = 'oniddb.cws.oregonstate.edu';
-$dbname = 'anderbre-db';
-$dbuser = 'anderbre-db';
-$dbpass = 'mkfCwxMsmsXjCDc7';
+if (file_exists("brett")){
+  $dbhost = 'oniddb.cws.oregonstate.edu';
+  $dbname = 'anderbre-db';
+  $dbuser = 'anderbre-db';
+  $dbpass = 'mkfCwxMsmsXjCDc7';
+} else {
+  $dbhost = 'oniddb.cws.oregonstate.edu';
+  $dbname = 'mcmurroj-db';
+  $dbuser = 'mcmurroj-db';
+  $dbpass = 'uHM64jmm6DzuW1qr';
+}
 
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){

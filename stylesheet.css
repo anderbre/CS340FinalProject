@@ -1,0 +1,29 @@
+body {
+  width: 75%;
+}
+
+table {
+  width: 75%;
+  border: 2px solid black;
+  border-radius: 5px 5px 5px 5px;
+  border-style: inset;
+  border-spacing: 0;
+}
+
+th {
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+td {
+  border: 1px solid black;
+  padding: 0;
+  text-align: center;
+}
+.heading {
+  background-color: lightgreen;
+}
+
+tr:nth-of-type(even) {
+  background-color: lightgray;
+}

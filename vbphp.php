@@ -58,19 +58,24 @@ if($mysqli->connect_errno){
       <th>Team</th>
 		</tr>
 <?php
+
+// create the sql query
 if(!($stmt = $mysqli->prepare("SELECT first_name,last_name,age,teamID FROM athletes"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
-
+// execute the sql query
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+// bind the results to variables
 if(!$stmt->bind_result($firstName, $lastName, $age, $team)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+// operate for each returned row. Inline the html.
 while($stmt->fetch()){
  echo "<tr>\n<td>" . $firstName . "</td>\n<td>" . $lastName . "</td>\n<td>" . $age . "</td><td>". $team . "</td>\n</tr>\n";
 }
+// close out the sql query.
 $stmt->close();
 ?>
 	</table>

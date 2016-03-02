@@ -44,9 +44,8 @@ if($mysqli->connect_errno){
 <br>
 	<ul>
 		<li><a href="athletes.php">List of Athletes</a></li>
-		<li></li>
-		<li></li>
-		<li></li>
+		<li><a href="coaches.php">List of Athletes</a></li>
+		<li><a href="teams.php">List of Athletes</a></li>
 	</ul>
 
 <table class="data_display">

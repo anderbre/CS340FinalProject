@@ -32,29 +32,28 @@ if($mysqli->connect_errno){
 <html>
 <body>
 
-<h1>All about athletes</h1>
-<p> Remember the following rules apply to athletes:</p>
+<h1>All about coaches</h1>
+<p> Remember the following rules apply to coaches:</p>
 <ul>
-	<li>Athletes can only belong to one team.</li>
-	<li>Athletes can have multiple positions.</li>
+	<li>Coaches can belong to more than one team.</li>
+	<li>coaches can have multiple positions, but only one per team.</li>
 </ul>
-<h3>Table 1: Athlete name, team, and number of positions held </h3>
+<h3>Table 1: Coach name, team, and position held </h3>
 
 <div>
 	<table>
 		<tr>
 			<th> First Name </th>
 			<th> Last Name </th>
-			<th> Age </th>
 			<th> Team Name </th>
-			<th> Age Group </th>
-			<th> Count Positions </th>
+      <th> Position </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
-athlete_position ap ON ap.athleteID = a.id INNER JOIN
+if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, t.age_group, p.name
+FROM coaches a JOIN teams t ON a.teamID = t.id JOIN
+position_coach_team ap ON ap.athleteID = a.id JOIN
 positions p ON p.id = ap.positionID
-GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group")))
+GROUP BY a.first_name, a.last_name, t.name, t.age_group")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -62,11 +61,11 @@ GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group")))
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
-if(!$stmt->bind_result($fname, $lname, $age, $tname, $ageGroup, $countType)){
+if(!$stmt->bind_result($fname, $lname, $age, $tname, $ageGroup, $pos)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $age . "\n</td>\n<td>"  . $tname . "\n</td>\n<td>" . $ageGroup . "\n</td>\n<td>" . $countType . "\n</td>\n</tr>";
+ echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>" . $ageGroup . "\n</td>\n<td>" . $pos . "\n</td>\n</tr>";
 }
 $stmt->close();
 ?>
@@ -81,7 +80,9 @@ $stmt->close();
 		<tr>
 			<th> First Name </th>
 			<th> Last Name </th>
-			<th> Position Type </th>
+      <th> Team Name </th>
+      <th> Age Group </th>
+			<th> Position </th>
 		</tr>
 <?php
 if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, p.type FROM athletes a INNER JOIN athlete_position ap ON

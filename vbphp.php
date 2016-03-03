@@ -43,9 +43,9 @@ if($mysqli->connect_errno){
 <h4>Links to different page:</h4>
 <br>
 	<ul>
-		<li><a href="athletes.php">List of Athletes</a></li>
-		<li><a href="coaches.php">List of Athletes</a></li>
-		<li><a href="teams.php">List of Athletes</a></li>
+		<li><a href="athletes.php">Athlete Information</a></li>
+		<li><a href="coaches.php">Coaches Information</a></li>
+		<li><a href="teams.php">Team Information</a></li>
 	</ul>
 
 <table class="data_display">

@@ -72,7 +72,7 @@ CREATE TABLE `position_coach_team` (
 
 
 insert into `positions` (`type`) values 
-('Right Side Hitter'), ('Middle Hitter'), ('Opposite'), ('Setter'), ('Middle Blocker'), ('Outside Hitter'), ('Head Coach'), ('Assistant Coach');
+('Outside'), ('Right Side'), ('Middle'), ('Setter'), ('Defensive Specialist '), ('Libero'), ('Head Coach'), ('Assistant Coach');
 
 
 insert into `coaches` (`first_name`,`last_name`) values 
@@ -94,9 +94,9 @@ insert into `team_coach_setup` (`teamID`,`coachID`) values
 ((SELECT `id` FROM `teams` WHERE `name` = 'Lions'), (SELECT `id` FROM `coaches` WHERE `first_name` = 'Marvin' AND`last_name` = 'Smith'));
 
 insert into `athlete_position` (`athleteID`,`positionID`) values 
-((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Right Side Hitter')),
+((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Libero')),
 ((SELECT `id` FROM `athletes` WHERE `first_name` = 'Peggy' AND `last_name` = 'Sue' ), (SELECT `id` FROM `positions` WHERE `type` = 'Setter')),
-((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Outside Hitter'));
+((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Right Side'));
 
 insert into `position_coach_team` (`coachID`,`positionID`, `teamID`) values 
 ((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Bears')),

@@ -21,20 +21,17 @@ Potential queries for final project:
 
 
 
--- Two queries I have on the current athletes.php page.
+-- ATHLETES.PHP QUERIES --
 
-1. Selects althete: first name + last name + age, team: name + age_group, COUNTS how many positions held.  Note: uses aggregate function
+1. Selects althete: first name + last name + age, team: name 
 
-SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
-athlete_position ap ON ap.athleteID = a.id INNER JOIN 
-positions p ON p.id = ap.positionID 
-GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group
+SELECT a.first_name, a.last_name, a.age, t.name FROM athletes a INNER JOIN teams t ON a.teamID = t.id
 
-2. All positions held by each athlete 
+2. All positions held by all athlete (even if empty).
 
-SELECT a.first_name, a.last_name, p.type FROM athletes a INNER JOIN athlete_position ap ON
-ap.athleteID = a.id INNER JOIN positions p ON
-p.id = ap.positionID 
+SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
+ap.athleteID = a.id Left JOIN positions p ON
+p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc
 
 
 
@@ -50,4 +47,9 @@ c.id = tc.coachID INNER JOIN teams t ON tc.teamID= t.id
 SELECT c.first_name, t.name, p.type FROM positions p INNER JOIN position_coach_team pct ON p.id = pct.positionID INNER JOIN
 coaches c ON c.id = pct.coachID INNER JOIN teams t ON t.id = pct.teamID
 
+3. (Used to be on athlete page) Selects althete: first name + last name + age, team: name + age_group, COUNTS how many positions held.  Note: uses aggregate function
 
+SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
+athlete_position ap ON ap.athleteID = a.id INNER JOIN 
+positions p ON p.id = ap.positionID 
+GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group

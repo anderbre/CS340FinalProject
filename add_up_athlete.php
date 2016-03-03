@@ -19,49 +19,55 @@ if (file_exists("brett")){
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;}
+
     $fname = $_POST['first_name'];
     $lname = $_POST['last_name'];
     $age = $_POST['age'];
-    $teamID = $_POST['first_name'];
-
-if($_POST['Add'])
+    $teamName= $_POST['teamID'];
+ 
+if(isset($_POST['Add']))
 {
-
-
-if(!$mysqli || $msqli->connect_errno){
-	echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-	}
+    
+if(!$mysqli || $mysqli->connect_errno){
+  echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
+  }
 
 if(!($stmt = $mysqli->prepare("INSERT INTO `athletes` (`first_name`,`last_name`,`age`,`teamID`) VALUES (?,?,?,?)"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+  echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
-if(!($stmt->bind_param("ssii",$_POST['FirstName'],$_POST['LastName'],$_POST['Homeworld'],$_POST['Age']))){
-	echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
+if(!($stmt->bind_param("ssii",$fname , $lname, $age, $teamName))){
+  echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
 }
 if(!$stmt->execute()){
-	echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
+  echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
 } else {
-	echo "Added " . $stmt->affected_rows . " rows to bsg_people.";}
+  echo "Athlete has been added to database.";}
 }
 
 else
 {
 
-if(!$mysqli || $msqli->connect_errno){
-	echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-	}
-if(!($stmt = $mysqli->prepare("INSERT INTO bsg_people(fname, lname, homeworld, age) VALUES (?,?,?,?)"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-
-
-
-
-
+if(!($updateQ = $mysqli->prepare("UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=? "))){
+  echo "Prepare failed: "  . $updateQ->errno . " " . $updateQ->error;
+}
+if(!($updateQ->bind_param("iiss",$teamName , $age, $fname, $lname))){
+  echo "Bind failed: "  . $updateQ->errno . " " . $updateQ->error;
+}
+if(!$updateQ->execute()){
+  echo "Execute failed: "  . $updateQ->errno . " " . $updateQ->error;
+} 
+else if($updateQ->affected_rows > 0)
+{
+  echo "Athlete age and team have been updated!";
+}
+  else
+  {
+    echo "No rows affected, please enter the first name and last of current athlete to update.";
+  }
 
 
 }
 
 
-
-
 ?>
+<p>Navigate back to <a href="athletes.php"> athletes</a> page.

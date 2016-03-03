@@ -38,7 +38,7 @@ if($mysqli->connect_errno){
 	<li>Athletes can only belong to one team.</li>
 	<li>Athletes can have multiple positions.</li>
 </ul>
-<h3>Table 1: Athlete name, team, and number of positions held </h3>
+<h3>Table 1: Athlete's Name and Team and Age </h3>
 
 <div>
 	<table>
@@ -47,14 +47,9 @@ if($mysqli->connect_errno){
 			<th> Last Name </th>
 			<th> Age </th>
 			<th> Team Name </th>
-			<th> Age Group </th>
-			<th> Count Positions </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
-athlete_position ap ON ap.athleteID = a.id INNER JOIN
-positions p ON p.id = ap.positionID
-GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group")))
+if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name FROM athletes a INNER JOIN teams t ON a.teamID = t.id")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -62,18 +57,18 @@ GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group")))
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
-if(!$stmt->bind_result($fname, $lname, $age, $tname, $ageGroup, $countType)){
+if(!$stmt->bind_result($fname, $lname, $age, $tname)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $age . "\n</td>\n<td>"  . $tname . "\n</td>\n<td>" . $ageGroup . "\n</td>\n<td>" . $countType . "\n</td>\n</tr>";
+ echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $age . "\n</td>\n<td>"  . $tname . "\n</td>\n</tr>";
 }
 $stmt->close();
 ?>
 	</table>
 </div>
 
-<h3>Table 2: All positions held by each athlete </h3>
+<h3>Table 2: All positions held by each athlete, ordered by team</h3>
 
 
 <div>
@@ -81,12 +76,13 @@ $stmt->close();
 		<tr>
 			<th> First Name </th>
 			<th> Last Name </th>
+			<th> Team Name </th>
 			<th> Position Type </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, p.type FROM athletes a INNER JOIN athlete_position ap ON
-ap.athleteID = a.id INNER JOIN positions p ON
-p.id = ap.positionID ")))
+if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
+ap.athleteID = a.id Left JOIN positions p ON
+p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -94,11 +90,11 @@ p.id = ap.positionID ")))
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
-if(!$stmt->bind_result($fname, $lname, $type)){
+if(!$stmt->bind_result($fname, $lname,$tname, $type)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $type . "\n</td>\n</tr>";
+ echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>\n" . $type . "\n</td>\n</tr>";
 }
 $stmt->close();
 ?>
@@ -106,8 +102,9 @@ $stmt->close();
 </div>
 <br>
 <h3>Update or Add Athlete</h3>
-<p>**You may update athlete age and/or team</p>
-<form method="post" action="addAthlete.php">
+<p>*You may <b>update</b> athlete age and team.</p>
+<p>**To manage positions, please go to the <a href="positions.php">positions</a> page.</p>
+<form method="post" action="add_up_athlete.php">
 
 		<fieldset>
 			<legend>Athlete Name</legend>
@@ -122,7 +119,7 @@ $stmt->close();
 
 		<fieldset>
 			<legend>Athlete's Team</legend>
-			<select name="Homeworld">
+			<select name="teamID">
 <?php
 if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -145,6 +142,9 @@ $stmt->close();
 		<input type="submit" name="Add" value="Add Athlete" />
 		<input type="submit" name="Update" value="Update Athlete" />
 	</form>
+
+
+
 
 
 </body>

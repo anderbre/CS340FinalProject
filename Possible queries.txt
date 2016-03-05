@@ -33,8 +33,39 @@ SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athle
 ap.athleteID = a.id Left JOIN positions p ON
 p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc
 
+3.  DROP DOWN LIST: --Athlete's Team--
+
+SELECT id, name FROM teams
+
+-- ADD_UP+ATHLETE.PHP QUERIES --
+1.  Inserts new athlete into athletes table by first name, last name , age , and team ID
+
+INSERT INTO `athletes` (`first_name`,`last_name`,`age`,`teamID`) VALUES (?,?,?,?)
+
+2.  Updates team and age based on user input first name and last name combination
+
+UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=? 
 
 
+-- POSITIONS.PHP QUERIES --
+
+1. Coach positions and team by position type
+
+SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c LEFT JOIN team_coach_setup tcs ON c.id = tcs.teamID Left Join position_coach_team pct ON
+pct.coachID = c.id Left Join teams t on t.id = pct.teamID Left Join positions p ON p.id=pct.positionID Order By p.type desc
+
+2. (Same as athlete #2 query)
+
+SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
+ap.athleteID = a.id Left JOIN positions p ON
+p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc
+
+3.  DROP DOWN LIST: --Coach's Positions--
+
+SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' 
+
+
+------------------------------------------------------------------------
 -- Some queries I have ran already/tested, not implemented.
 
 1. Displays coach first name and team they coach for...
@@ -42,12 +73,7 @@ p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc
 SELECT c.first_name, t.name from coaches c Inner Join team_coach_setup tc ON 
 c.id = tc.coachID INNER JOIN teams t ON tc.teamID= t.id
 
-2.  Select coach first name, position on all teams belong to
-
-SELECT c.first_name, t.name, p.type FROM positions p INNER JOIN position_coach_team pct ON p.id = pct.positionID INNER JOIN
-coaches c ON c.id = pct.coachID INNER JOIN teams t ON t.id = pct.teamID
-
-3. (Used to be on athlete page) Selects althete: first name + last name + age, team: name + age_group, COUNTS how many positions held.  Note: uses aggregate function
+2. (Used to be on athlete page) Selects althete: first name + last name + age, team: name + age_group, COUNTS how many positions held.  Note: uses aggregate function
 
 SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
 athlete_position ap ON ap.athleteID = a.id INNER JOIN 

@@ -26,14 +26,14 @@ if($mysqli->connect_errno){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Final Project: Volleyball Database</title>
+    <title>Athletes</title>
     <link rel="stylesheet" href="stylesheet.css" type="text/css">
 </head>
 <html>
 <body>
 
 <h1>All about athletes</h1>
-<p> Remember the following rules apply to athletes:</p>
+<p> Remember the following applies to athletes:</p>
 <ul>
 	<li>Athletes can only belong to one team.</li>
 	<li>Athletes can have multiple positions.</li>
@@ -101,8 +101,10 @@ $stmt->close();
 	</table>
 </div>
 <br>
+
+<div class="formHeader">
 <h3>Update or Add Athlete</h3>
-<p>*You may <b>update</b> athlete age and team.</p>
+<p>*You may <b>update</b> an athlete's age and team, just enter a valid first name and last name of a current player.</p>
 <p>**To manage positions, please go to the <a href="positions.php">positions</a> page.</p>
 <form method="post" action="add_up_athlete.php">
 
@@ -142,6 +144,7 @@ $stmt->close();
 		<input type="submit" name="Add" value="Add Athlete" />
 		<input type="submit" name="Update" value="Update Athlete" />
 	</form>
+</div>
 
 
 

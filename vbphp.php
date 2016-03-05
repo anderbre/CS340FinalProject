@@ -46,6 +46,7 @@ if($mysqli->connect_errno){
 		<li><a href="athletes.php">Athlete Information</a></li>
 		<li><a href="coaches.php">Coaches Information</a></li>
 		<li><a href="teams.php">Team Information</a></li>
+		<li><a href="positions.php">Position Information</a></li>
 	</ul>
 
 <table class="data_display">
@@ -82,4 +83,4 @@ $stmt->close();
 
 
 </body>
-</html>
+</ht

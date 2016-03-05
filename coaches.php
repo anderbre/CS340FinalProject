@@ -142,6 +142,7 @@ document.getElementById("coach_name").onchange = function(){
     last = name[0];
     document.getElementById("coach_f_name").value = first.substr(1);
     document.getElementById("coach_l_name").value = last;
+    document.getElementById("coach_ID").value = this.value;
   } else {
     alert("fail");
   }

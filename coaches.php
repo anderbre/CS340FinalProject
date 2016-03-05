@@ -144,7 +144,9 @@ document.getElementById("coach_name").onchange = function(){
     document.getElementById("coach_l_name").value = last;
     document.getElementById("coach_ID").value = this.value;
   } else {
-    alert("fail");
+    document.getElementById("coach_f_name").value = "";
+    document.getElementById("coach_l_name").value = "";
+    document.getElementById("coach_ID").value = this.value;
   }
 }
 </script>

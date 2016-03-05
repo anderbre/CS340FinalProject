@@ -51,7 +51,7 @@ UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=?
 
 1. Coach positions and team by position type
 
-SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c LEFT JOIN team_coach_setup tcs ON c.id = tcs.teamID Left Join position_coach_team pct ON
+SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c Left Join position_coach_team pct ON
 pct.coachID = c.id Left Join teams t on t.id = pct.teamID Left Join positions p ON p.id=pct.positionID Order By p.type desc
 
 2. (Same as athlete #2 query)

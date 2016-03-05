@@ -78,16 +78,75 @@ insert into `positions` (`type`) values
 insert into `coaches` (`first_name`,`last_name`) values
 ('John', 'Linkin'),
 ('Marvin', 'Smith'),
-('John', 'Fox');
+('Phillip', 'Luckow'),
+('Linda', 'Debusk'),
+('Golda', 'Pixley'),
+('Jon', 'Mahan'),
+('Zane', 'Seward'),
+('Reinaldo', 'Durney'),
+('Shay', 'Dutcher'),
+('Katrina', 'Farrar'),
+('Phil', 'Worrall'),
+('Prudence', 'Ryans');
+
+
 
 insert into `teams` (`name`,`age_group`,`level`) values
-('Bears', '14 & under', '4'),
-('Lions', '17 & under', '3');
+('Bears', '18 & under', '4'),
+('Lions', '17 & under', '3'),
+('Warriors', '17 & under', '1'),
+('Fire Breathing Rubber Duckies', '14 & under', '3'),
+('Falcons', '15 & under', '3'),
+('Dragons', '12 & under', '3');
 
 insert into `athletes` (`first_name`,`last_name`,`age`,`teamID`) values
-('Bobby', 'Joe', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
-('Peggy', 'Sue', '16',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
-('Billy', 'Dean', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Lions'));
+('Bobby', 'Joe', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+('Peggy', 'Sue', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+('Gary', 'Beck', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+('Tracey', 'Roy', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+('Estela', 'Lilly', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+('Gwenn', 'Felder', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+('Jim', 'Roy', '16',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+
+('Linda', 'Walder', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+('Lucas', 'Debellis', '16',(SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+('Deane', 'Marro', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+('Catarina', 'Cassese', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+('Billy', 'Dean', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+('Antony', 'Kimbrough', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+
+('Courtney', 'Diaz', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+('Michael', 'Gilham', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+('Janell', 'Hunt', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+('Freda', 'Roybal', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+('Gargarete', 'Tracey', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+('Tommy', 'Eckhart', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+('Lien', 'Judge', '17',(SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+
+('Bill', 'Fennel', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+('Kizzy', 'Lamere', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+('Evonne', 'Yost', '12',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+('Jerrod', 'Dopp', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+('Bell', 'Higgs', '13',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+('Derrick', 'Mclead', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+('Stephenie', 'Tynan', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+
+('Morgan', 'Ram', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+('Heidy', 'Decesare', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+('Shayne', 'Gillispie', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+('Hank', 'Bibler', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+('Vito', 'Bady', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+('Tyron', 'Lagon', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+('Rocky', 'Iskra', '15',(SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+
+('Erica', 'Maxton', '12',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Sue', 'Baggett', '12',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Tessa', 'Lavalley', '12',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Marica', 'Overbay', '10',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Sanora', 'Gift', '12',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Twana', 'Brocious', '11',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Rickey', 'Soden', '12',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+('Jonah', 'Felts', '11',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons'));
 
 
 insert into `team_coach_setup` (`teamID`,`coachID`) values

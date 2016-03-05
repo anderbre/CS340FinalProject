@@ -30,6 +30,19 @@ if($mysqli->connect_errno){
 </head>
 
 <body>
+
+	<ul class="NavBar">
+		<li class="navItem"><a class="active navlink" href="vbphp.php">Home</a></li>
+		<li class="navItem"><a class="navlink" href="athletes.php">Athletes</a></li>
+		<li class="navItem"><a class="navlink"  href="coaches.php">Coaches</a></li>
+		<li class="navItem"><a class="navlink"  href="teams.php">Teams</a></li>
+		<li class="navItem"><a class="navlink"  href="positions.php">Positions</a></li>
+	</ul>
+
+
+<br>
+
+
 <h1>Final Project: Volleyball Database</h1>
 <br>
 <br>
@@ -39,6 +52,15 @@ if($mysqli->connect_errno){
 	Here we can detail positions types, relationship contraints (i.e coaches can coach more than one team...)
 </p>
 
+
+
+
+<h3>Volleyball ER Diagram</h3>
+<img src="ERdiagram.png" alt="See VBschema.png" style="width:400;height:400;">
+<br>
+<h3>Volleyball Schema</h3>
+<img src="VBschema.png" alt="See VBschema.png" style="width:400;height:400;">
+<br>
 
 <h4>Links to different page:</h4>
 <br>

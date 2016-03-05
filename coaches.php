@@ -77,39 +77,55 @@ $stmt->close();
 
 <br>
 <h3>Update or Add Coach</h3>
+<select name=coachToUpdate id="coach_name">
+  <option value="">Select existing</option>
+  <?php
+  if(!($stmt = $mysqli->prepare("SELECT id, first_name, last_name FROM coaches ORDER BY last_name"))){
+  	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+  }
 
+  if(!$stmt->execute()){
+  	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+  }
+  if(!$stmt->bind_result($id, $firstname, $lastname)){
+  	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+  }
+  while($stmt->fetch()){
+  	echo '<option value=" '. $id . ' "> ' . $lastname .', '. $firstname .'</option>';
+  }
+  $stmt->close();
+  ?>
+</select>
 <form method="post" action="addAthlete.php">
 
 		<fieldset>
-			<legend>Athlete Name</legend>
-			<p>First Name: <input type="text" name="first_name" /></p>
-			<p>Last Name: <input type="text" name="last_name" /></p>
+			<legend>Coach</legend>
+      <input type="hidden" name="coach_id" id="coach_ID"/>
+			<p>First Name: <input type="text" name="first_name" id="coach_f_name"/></p>
+			<p>Last Name: <input type="text" name="last_name" id="coach_l_name"/></p>
 		</fieldset>
 
 		<fieldset>
-			<legend>Athlete Age</legend>
-			<p>Age: <input type="text" name="age" /></p>
-		</fieldset>
-
-		<fieldset>
-			<legend>Athlete's Team</legend>
+			<legend>Team</legend>
 			<select name="teamID">
-<?php
-if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
+        <option value="">Select Team</option>
+        <?php
+        if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
+        	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+        }
 
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($id, $teamname)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while($stmt->fetch()){
-	echo '<option value=" '. $id . ' "> ' . $teamname . '</option>\n';
-}
-$stmt->close();
-?>
+        if(!$stmt->execute()){
+        	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+        }
+        if(!$stmt->bind_result($id, $teamname)){
+        	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+        }
+        while($stmt->fetch()){
+        	echo '<option value=" '. $id . ' "> ' . $teamname . '</option>\n';
+        }
+        $stmt->close();
+        ?>
+
 
 		</select>
 		</fieldset>
@@ -117,6 +133,20 @@ $stmt->close();
 		<input type="submit" name="Update" value="Update Athlete" />
 	</form>
 
+<script type="text/javascript">
+document.getElementById("coach_name").onchange = function(){
+  if (this.value != 0){
+    var box = document.getElementById("coach_name");
+    var name = box.options[box.selectedIndex].text.split(',');
+    first = name[1];
+    last = name[0];
+    document.getElementById("coach_f_name").value = first.substr(1);
+    document.getElementById("coach_l_name").value = last;
+  } else {
+    alert("fail");
+  }
+}
+</script>
 
 </body>
 </html>

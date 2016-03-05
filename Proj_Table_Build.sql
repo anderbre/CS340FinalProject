@@ -13,7 +13,7 @@ SET FOREIGN_KEY_CHECKS =1;
 
 CREATE TABLE `teams` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,  
+  `name` varchar(255) NOT NULL,
   `age_group` varchar(255) ,
   `level` int(11) ,
   PRIMARY KEY (`id`),
@@ -22,7 +22,7 @@ CREATE TABLE `teams` (
 
 CREATE TABLE `athletes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(255) NOT NULL,  
+  `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `age` int(11) ,
   `teamID` int(11) ,
@@ -32,7 +32,7 @@ CREATE TABLE `athletes` (
 
 CREATE TABLE `coaches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(255) NOT NULL,  
+  `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT fname_lname_Unique_co UNIQUE (`first_name`, `last_name`)
@@ -48,7 +48,7 @@ CREATE TABLE `team_coach_setup` (
 
 CREATE TABLE `positions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(255) NOT NULL, 
+  `type` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB;
 
@@ -71,36 +71,35 @@ CREATE TABLE `position_coach_team` (
 )ENGINE=InnoDB;
 
 
-insert into `positions` (`type`) values 
+insert into `positions` (`type`) values
 ('Outside'), ('Right Side'), ('Middle'), ('Setter'), ('Defensive Specialist '), ('Libero'), ('Head Coach'), ('Assistant Coach');
 
 
-insert into `coaches` (`first_name`,`last_name`) values 
+insert into `coaches` (`first_name`,`last_name`) values
 ('John', 'Linkin'),
-('Marvin', 'Smith');
+('Marvin', 'Smith'),
+('John', 'Fox');
 
-insert into `teams` (`name`,`age_group`,`level`) values 
-('Bears', '14-16', '4'),
-('Lions', '17-18', '3');
+insert into `teams` (`name`,`age_group`,`level`) values
+('Bears', '14 & under', '4'),
+('Lions', '17 & under', '3');
 
-insert into `athletes` (`first_name`,`last_name`,`age`,`teamID`) values 
+insert into `athletes` (`first_name`,`last_name`,`age`,`teamID`) values
 ('Bobby', 'Joe', '14',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
 ('Peggy', 'Sue', '16',(SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
 ('Billy', 'Dean', '18',(SELECT `id` FROM `teams` WHERE `name` = 'Lions'));
 
 
-insert into `team_coach_setup` (`teamID`,`coachID`) values 
+insert into `team_coach_setup` (`teamID`,`coachID`) values
 ((SELECT `id` FROM `teams` WHERE `name` = 'Bears'), (SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND`last_name` = 'Linkin')),
 ((SELECT `id` FROM `teams` WHERE `name` = 'Lions'), (SELECT `id` FROM `coaches` WHERE `first_name` = 'Marvin' AND`last_name` = 'Smith'));
 
-insert into `athlete_position` (`athleteID`,`positionID`) values 
+insert into `athlete_position` (`athleteID`,`positionID`) values
 ((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Libero')),
 ((SELECT `id` FROM `athletes` WHERE `first_name` = 'Peggy' AND `last_name` = 'Sue' ), (SELECT `id` FROM `positions` WHERE `type` = 'Setter')),
 ((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Right Side'));
 
-insert into `position_coach_team` (`coachID`,`positionID`, `teamID`) values 
+insert into `position_coach_team` (`coachID`,`positionID`, `teamID`) values
 ((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
 ((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
 ((SELECT `id` FROM `coaches` WHERE `first_name` = 'Marvin' AND `last_name` = 'Smith' ), (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Lions'));
-
-

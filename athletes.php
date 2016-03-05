@@ -42,7 +42,7 @@ if($mysqli->connect_errno){
 
 <div>
 	<table>
-		<tr>
+		<tr class="heading">
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Age </th>
@@ -73,7 +73,7 @@ $stmt->close();
 
 <div>
 	<table>
-		<tr>
+		<tr class="heading">
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Team Name </th>

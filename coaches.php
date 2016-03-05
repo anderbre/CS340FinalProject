@@ -42,18 +42,21 @@ if($mysqli->connect_errno){
 
 <div>
 	<table>
-		<tr>
+		<tr class="heading">
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Team Name </th>
+      <th> Age Group </th>
+      <th> Level </th>
       <th> Position </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, t.age_group, p.name
-FROM coaches a JOIN teams t ON a.teamID = t.id JOIN
-position_coach_team ap ON ap.athleteID = a.id JOIN
-positions p ON p.id = ap.positionID
-GROUP BY a.first_name, a.last_name, t.name, t.age_group")))
+if(!($stmt = $mysqli->prepare("SELECT coaches.first_name, coaches.last_name, teams.name, teams.age_group, teams.level, positions.type
+FROM coaches JOIN team_coach_setup ON coaches.id = team_coach_setup.coachID
+JOIN teams ON team_coach_setup.teamID = teams.id
+JOIN position_coach_team ON position_coach_team.coachID = coaches.id
+JOIN positions ON positions.id = position_coach_team.positionID
+ORDER BY teams.age_group DESC")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -61,53 +64,20 @@ GROUP BY a.first_name, a.last_name, t.name, t.age_group")))
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
-if(!$stmt->bind_result($fname, $lname, $age, $tname, $ageGroup, $pos)){
+if(!$stmt->bind_result($fname, $lname, $tname, $ageGroup, $level, $pos)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>" . $ageGroup . "\n</td>\n<td>" . $pos . "\n</td>\n</tr>";
+ echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>" . $ageGroup. "\n</td>\n<td>" . $level . "\n</td>\n<td>" . $pos . "\n</td>\n</tr>";
 }
 $stmt->close();
 ?>
 	</table>
 </div>
 
-<h3>Table 2: All positions held by each athlete </h3>
-
-
-<div>
-	<table>
-		<tr>
-			<th> First Name </th>
-			<th> Last Name </th>
-      <th> Team Name </th>
-      <th> Age Group </th>
-			<th> Position </th>
-		</tr>
-<?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, p.type FROM athletes a INNER JOIN athlete_position ap ON
-ap.athleteID = a.id INNER JOIN positions p ON
-p.id = ap.positionID ")))
-{
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($fname, $lname, $type)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $type . "\n</td>\n</tr>";
-}
-$stmt->close();
-?>
-	</table>
-</div>
 <br>
-<h3>Update or Add Athlete</h3>
-<p>**You may update athlete age and/or team</p>
+<h3>Update or Add Coach</h3>
+
 <form method="post" action="addAthlete.php">
 
 		<fieldset>
@@ -123,7 +93,7 @@ $stmt->close();
 
 		<fieldset>
 			<legend>Athlete's Team</legend>
-			<select name="Homeworld">
+			<select name="teamID">
 <?php
 if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;

@@ -96,7 +96,7 @@ $stmt->close();
   $stmt->close();
   ?>
 </select>
-<form method="post" action="addAthlete.php">
+<form method="post" action="add_up_coach.php">
 
 		<fieldset>
 			<legend>Coach</legend>

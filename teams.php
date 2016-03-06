@@ -44,7 +44,7 @@ if($mysqli->connect_errno){
 
 <br>
 
-<h1>All about athletes</h1>
+<h1>All about Teams</h1>
 <p> Remember the following rules apply to athletes:</p>
 <ul>
 	<li>Athletes can only belong to one team.</li>
@@ -53,20 +53,18 @@ if($mysqli->connect_errno){
 <h3>Table 1: Athlete name, team, and number of positions held </h3>
 
 <div>
-	<table>
-		<tr>
-			<th> First Name </th>
-			<th> Last Name </th>
-			<th> Age </th>
+	<table id="team_table">
+		<tr class="heading">
 			<th> Team Name </th>
 			<th> Age Group </th>
-			<th> Count Positions </th>
+			<th> Level </th>
+      <th> Players </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
-athlete_position ap ON ap.athleteID = a.id INNER JOIN
-positions p ON p.id = ap.positionID
-GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group")))
+if(!($stmt = $mysqli->prepare("SELECT teams.name, teams.age_group, teams.level,  COUNT(athletes.id) AS players FROM teams
+LEFT JOIN athletes ON athletes.teamID = teams.id
+GROUP BY teams.name
+ORDER BY teams.age_group DESC, teams.level ASC")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -74,89 +72,99 @@ GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group")))
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
-if(!$stmt->bind_result($fname, $lname, $age, $tname, $ageGroup, $countType)){
+if(!$stmt->bind_result($tname, $tage, $tlevel, $playercount)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $age . "\n</td>\n<td>"  . $tname . "\n</td>\n<td>" . $ageGroup . "\n</td>\n<td>" . $countType . "\n</td>\n</tr>";
+ echo "<tr>\n<td>" . $tname . "</td>\n<td>" . $tage . "</td>\n<td>" . $tlevel . "</td>\n<td>"  . $playercount . "</td>\n</tr>";
 }
 $stmt->close();
 ?>
 	</table>
 </div>
 
-<h3>Table 2: All positions held by each athlete </h3>
-
-
-<div>
-	<table>
-		<tr>
-			<th> First Name </th>
-			<th> Last Name </th>
-			<th> Position Type </th>
-		</tr>
-<?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, p.type FROM athletes a INNER JOIN athlete_position ap ON
-ap.athleteID = a.id INNER JOIN positions p ON
-p.id = ap.positionID ")))
-{
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($fname, $lname, $type)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $type . "\n</td>\n</tr>";
-}
-$stmt->close();
-?>
-	</table>
-</div>
 <br>
-<h3>Update or Add Athlete</h3>
-<p>**You may update athlete age and/or team</p>
-<form method="post" action="addAthlete.php">
+<h3>Update or Add Team</h3>
 
+
+<form method="post" action="add_up_team.php">
+  <input type="checkbox" name="type" value="update" id="formType">Update
+  <select name=teamToUpdate id="team_name" style="visibility: hidden">
+    <option value="-1">Select a team</option>
+    <?php
+    if(!($stmt = $mysqli->prepare("SELECT id, name, age_group, level FROM teams ORDER BY age_group DESC, level ASC"))){
+    	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+    }
+
+    if(!$stmt->execute()){
+    	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+    }
+    if(!$stmt->bind_result($id, $name, $age, $level)){
+    	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+    }
+    while($stmt->fetch()){
+    	echo '<option value=" '. $id .'">'.$name.'</option>';
+    }
+    $stmt->close();
+    ?>
+  </select>
 		<fieldset>
-			<legend>Athlete Name</legend>
-			<p>First Name: <input type="text" name="first_name" /></p>
-			<p>Last Name: <input type="text" name="last_name" /></p>
+			<legend>Team</legend>
+      <input type="hidden" name="team_id" id="team_ID"/>
+			<label>Team Name:<input type="text" name="team_name" id="team"/></label>
+			<select name="agegroup" id="agegroup">
+        <option value="18 & Under">18 & under</option>
+        <option value="17 & Under">17 & under</option>
+        <option value="16 & Under">16 & under</option>
+        <option value="15 & Under">15 & under</option>
+        <option value="14 & Under">14 & under</option>
+        <option value="13 & Under">13 & under</option>
+        <option value="12 & Under">12 & under</option>
+      </select><br/>
+      <label>Team Level: <input type="number" name="teamlevel" id="teamlevel"/></label>
 		</fieldset>
-
-		<fieldset>
-			<legend>Athlete Age</legend>
-			<p>Age: <input type="text" name="age" /></p>
-		</fieldset>
-
-		<fieldset>
-			<legend>Athlete's Team</legend>
-			<select name="Homeworld">
-<?php
-if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($id, $teamname)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while($stmt->fetch()){
-	echo '<option value=" '. $id . ' "> ' . $teamname . '</option>\n';
-}
-$stmt->close();
-?>
-
-		</select>
-		</fieldset>
-		<input type="submit" name="Add" value="Add Athlete" />
-		<input type="submit" name="Update" value="Update Athlete" />
+		<input type="submit" name="Submit" value="submit" />
 	</form>
+
+<script type="text/javascript">
+document.getElementById("formType").onchange = function(){
+  if (this.checked){
+    document.getElementById("team_name").style.visibility = "visible";
+  } else {
+    document.getElementById("team_name").style.visibility = "hidden";
+    document.getElementById("teamlevel").value = "";
+    document.getElementById("team").value = "";
+    document.getElementById("agegroup").selectedIndex = -1;
+    document.getElementById("team_ID").value = -1;
+  }
+}
+document.getElementById("team_name").onchange = function(){
+  if (this.value != -1){
+    var name = document.getElementById("team_name");
+    var name_text = name.options[name.selectedIndex].textContent;
+    document.getElementById("team").value = name_text;
+    document.getElementById("team_ID").value = this.value;
+    // search for table rows here, and fill in the rest.
+    var t_table = document.getElementById("team_table");
+    for (var i = 0; i < t_table.rows.length; i++){
+      if (t_table.rows[i].cells[0].textContent == name_text){
+        document.getElementById("teamlevel").value = Number(t_table.rows[i].cells[2].textContent);
+        var a_list = document.getElementById("agegroup");
+        for (var a = 0; a < a_list.options.length; a++){
+          if (a_list.options[a].text == t_table.rows[i].cells[1].textContent){
+            a_list.selectedIndex = a;
+          }
+        }
+      }
+    }
+  } else {
+    document.getElementById("team").value = "";
+    document.getElementById("team_ID").value = -1;
+    document.getElementById("agegroup").selectedIndex = -1;
+    document.getElementById("teamlevel").value = "";
+  }
+}
+</script>
 
 <br>
 <footer> Final Project by Brett Anderson and Joseph McMurrough</footer>

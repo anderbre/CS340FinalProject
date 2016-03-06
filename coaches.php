@@ -41,8 +41,8 @@ if($mysqli->connect_errno){
 <h3>Table 1: Coach name, team, and position held </h3>
 
 <div>
-	<table>
-		<tr class="heading">
+	<table id="coach_table">
+		<tr class="heading" >
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Team Name </th>
@@ -68,7 +68,7 @@ if(!$stmt->bind_result($fname, $lname, $tname, $ageGroup, $level, $pos)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
 while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>" . $ageGroup. "\n</td>\n<td>" . $level . "\n</td>\n<td>" . $pos . "\n</td>\n</tr>";
+ echo "<tr>\n<td>" . $fname . "</td>\n<td>" . $lname . "</td>\n<td>" . $tname . "</td>\n<td>" . $ageGroup. "</td>\n<td>" . $level . "</td>\n<td>" . $pos . "</td>\n</tr>";
 }
 $stmt->close();
 ?>
@@ -77,38 +77,38 @@ $stmt->close();
 
 <br>
 <h3>Update or Add Coach</h3>
-<select name=coachToUpdate id="coach_name">
-  <option value="">Select existing</option>
-  <?php
-  if(!($stmt = $mysqli->prepare("SELECT id, first_name, last_name FROM coaches ORDER BY last_name"))){
-  	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-  }
 
-  if(!$stmt->execute()){
-  	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-  }
-  if(!$stmt->bind_result($id, $firstname, $lastname)){
-  	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-  }
-  while($stmt->fetch()){
-  	echo '<option value=" '. $id . ' "> ' . $lastname .', '. $firstname .'</option>';
-  }
-  $stmt->close();
-  ?>
-</select>
+
 <form method="post" action="add_up_coach.php">
+  <input type="checkbox" name="type" value="update" checked="checked" id="formType">Update
+  <select name=coachToUpdate id="coach_name">
+    <option value="-1">Select a coach</option>
+    <?php
+    if(!($stmt = $mysqli->prepare("SELECT id, first_name, last_name FROM coaches ORDER BY last_name"))){
+    	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+    }
 
+    if(!$stmt->execute()){
+    	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+    }
+    if(!$stmt->bind_result($id, $firstname, $lastname)){
+    	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+    }
+    while($stmt->fetch()){
+    	echo '<option value=" '. $id . ' "> ' . $lastname .', '. $firstname .'</option>';
+    }
+    $stmt->close();
+    ?>
+  </select>
 		<fieldset>
 			<legend>Coach</legend>
       <input type="hidden" name="coach_id" id="coach_ID"/>
 			<p>First Name: <input type="text" name="first_name" id="coach_f_name"/></p>
 			<p>Last Name: <input type="text" name="last_name" id="coach_l_name"/></p>
-		</fieldset>
 
-		<fieldset>
-			<legend>Team</legend>
-			<select name="teamID">
-        <option value="">Select Team</option>
+			<label>Team</label>
+			<select name="teamID" id="team_list">
+        <option value="-1">Select Team</option>
         <?php
         if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
         	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -121,7 +121,7 @@ $stmt->close();
         	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
         }
         while($stmt->fetch()){
-        	echo '<option value=" '. $id . ' "> ' . $teamname . '</option>\n';
+        	echo '<option value="'. $id . ' ">'. $teamname .'</option>\n';
         }
         $stmt->close();
         ?>
@@ -129,24 +129,53 @@ $stmt->close();
 
 		</select>
 		</fieldset>
-		<input type="submit" name="Add" value="Add Athlete" />
-		<input type="submit" name="Update" value="Update Athlete" />
+		<input type="submit" name="Submit" value="submit" />
 	</form>
 
 <script type="text/javascript">
+document.getElementById("formType").onchange = function(){
+  if (this.checked){
+    document.getElementById("coach_name").style.visibility = "visible";
+  } else {
+    document.getElementById("coach_name").style.visibility = "hidden";
+    document.getElementById("coach_f_name").value = "";
+    document.getElementById("coach_l_name").value = "";
+    document.getElementById("coach_ID").value = this.value;
+    document.getElementById("team_list").selectedIndex = 0;
+  }
+}
 document.getElementById("coach_name").onchange = function(){
-  if (this.value != 0){
+  if (this.value != -1){
     var box = document.getElementById("coach_name");
     var name = box.options[box.selectedIndex].text.split(',');
-    first = name[1];
+    first = name[1].substr(1);
     last = name[0];
-    document.getElementById("coach_f_name").value = first.substr(1);
+    document.getElementById("coach_f_name").value = first;
     document.getElementById("coach_l_name").value = last;
     document.getElementById("coach_ID").value = this.value;
+
+    var table = document.getElementById("coach_table");
+    var team_name = "";
+    for (var i = 0; i < table.rows.length; i++){
+
+      if (table.rows[i].cells[1].textContent == last ){
+        if (table.rows[i].cells[0].textContent == first){
+          team_name = table.rows[i].cells[2].textContent;
+        }
+      }
+    }
+
+    var teamlist = document.getElementById("team_list");
+    for (var i = 0; i < teamlist.options.length; i++){
+      if (teamlist.options[i].textContent == team_name){
+        teamlist.selectedIndex = i;
+      }
+    }
   } else {
     document.getElementById("coach_f_name").value = "";
     document.getElementById("coach_l_name").value = "";
     document.getElementById("coach_ID").value = this.value;
+    document.getElementById("team_list").selectedIndex = 0;
   }
 }
 </script>

@@ -58,10 +58,9 @@ if($mysqli->connect_errno){
 		</tr>
 <?php
 if(!($stmt = $mysqli->prepare("SELECT coaches.first_name, coaches.last_name, teams.name, teams.age_group, teams.level, positions.type
-FROM coaches JOIN team_coach_setup ON coaches.id = team_coach_setup.coachID
-JOIN teams ON team_coach_setup.teamID = teams.id
-JOIN position_coach_team ON position_coach_team.coachID = coaches.id
-JOIN positions ON positions.id = position_coach_team.positionID
+FROM coaches LEFT JOIN position_coach_team ON position_coach_team.coachID = coaches.id
+LEFT JOIN positions ON positions.id = position_coach_team.positionID
+LEFT JOIN teams ON position_coach_team.teamID = teams.id
 ORDER BY teams.age_group DESC")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -86,8 +85,8 @@ $stmt->close();
 
 
 <form method="post" action="add_up_coach.php">
-  <input type="checkbox" name="type" value="update" checked="checked" id="formType">Update
-  <select name=coachToUpdate id="coach_name">
+  <input type="checkbox" name="type" value="update" id="formType">Update
+  <select name=coachToUpdate id="coach_name" style="visibility: hidden">
     <option value="-1">Select a coach</option>
     <?php
     if(!($stmt = $mysqli->prepare("SELECT id, first_name, last_name FROM coaches ORDER BY last_name"))){
@@ -111,29 +110,6 @@ $stmt->close();
       <input type="hidden" name="coach_id" id="coach_ID"/>
 			<p>First Name: <input type="text" name="first_name" id="coach_f_name"/></p>
 			<p>Last Name: <input type="text" name="last_name" id="coach_l_name"/></p>
-
-			<label>Team</label>
-			<select name="teamID" id="team_list">
-        <option value="-1">Select Team</option>
-        <?php
-        if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
-        	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-        }
-
-        if(!$stmt->execute()){
-        	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-        }
-        if(!$stmt->bind_result($id, $teamname)){
-        	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-        }
-        while($stmt->fetch()){
-        	echo '<option value="'. $id . ' ">'. $teamname .'</option>\n';
-        }
-        $stmt->close();
-        ?>
-
-
-		</select>
 		</fieldset>
 		<input type="submit" name="Submit" value="submit" />
 	</form>
@@ -147,7 +123,6 @@ document.getElementById("formType").onchange = function(){
     document.getElementById("coach_f_name").value = "";
     document.getElementById("coach_l_name").value = "";
     document.getElementById("coach_ID").value = this.value;
-    document.getElementById("team_list").selectedIndex = 0;
   }
 }
 document.getElementById("coach_name").onchange = function(){
@@ -159,29 +134,10 @@ document.getElementById("coach_name").onchange = function(){
     document.getElementById("coach_f_name").value = first;
     document.getElementById("coach_l_name").value = last;
     document.getElementById("coach_ID").value = this.value;
-
-    var table = document.getElementById("coach_table");
-    var team_name = "";
-    for (var i = 0; i < table.rows.length; i++){
-
-      if (table.rows[i].cells[1].textContent == last ){
-        if (table.rows[i].cells[0].textContent == first){
-          team_name = table.rows[i].cells[2].textContent;
-        }
-      }
-    }
-
-    var teamlist = document.getElementById("team_list");
-    for (var i = 0; i < teamlist.options.length; i++){
-      if (teamlist.options[i].textContent == team_name){
-        teamlist.selectedIndex = i;
-      }
-    }
   } else {
     document.getElementById("coach_f_name").value = "";
     document.getElementById("coach_l_name").value = "";
     document.getElementById("coach_ID").value = this.value;
-    document.getElementById("team_list").selectedIndex = 0;
   }
 }
 </script>

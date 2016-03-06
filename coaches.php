@@ -31,7 +31,13 @@ if($mysqli->connect_errno){
 </head>
 <html>
 <body>
-
+  <ul class="NavBar">
+    <li class="navItem"><a class="navlink" href="vbphp.php">Home</a></li>
+    <li class="navItem"><a class="navlink" href="athletes.php">Athletes</a></li>
+    <li class="navItem"><a class="active navlink"  href="coaches.php">Coaches</a></li>
+    <li class="navItem"><a class="navlink"  href="teams.php">Teams</a></li>
+    <li class="navItem"><a class="navlink"  href="positions.php">Positions</a></li>
+  </ul>
 <h1>All about coaches</h1>
 <p> Remember the following rules apply to coaches:</p>
 <ul>

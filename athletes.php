@@ -32,6 +32,18 @@ if($mysqli->connect_errno){
 <html>
 <body>
 
+
+  <ul class="NavBar">
+    <li class="navItem"><a class="navlink" href="vbphp.php">Home</a></li>
+    <li class="navItem"><a class="active navlink" href="athletes.php">Athletes</a></li>
+    <li class="navItem"><a class="navlink"  href="coaches.php">Coaches</a></li>
+    <li class="navItem"><a class="navlink"  href="teams.php">Teams</a></li>
+    <li class="navItem"><a class="navlink"  href="positions.php">Positions</a></li>
+  </ul>
+
+
+<br>
+
 <h1>All about athletes</h1>
 <p> Remember the following applies to athletes:</p>
 <ul>
@@ -49,7 +61,7 @@ if($mysqli->connect_errno){
 			<th> Team Name </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name FROM athletes a INNER JOIN teams t ON a.teamID = t.id")))
+if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name FROM athletes a INNER JOIN teams t ON a.teamID = t.id ORDER BY t.name,a.last_name")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -82,7 +94,7 @@ $stmt->close();
 <?php
 if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
 ap.athleteID = a.id Left JOIN positions p ON
-p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc")))
+p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc, a.last_name")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -146,9 +158,11 @@ $stmt->close();
 	</form>
 </div>
 
-
-
-
+<br>
+<br>
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 
 </body>
 </html>

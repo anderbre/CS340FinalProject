@@ -32,6 +32,18 @@ if($mysqli->connect_errno){
 <html>
 <body>
 
+
+  <ul class="NavBar">
+    <li class="navItem"><a class="navlink" href="vbphp.php">Home</a></li>
+    <li class="navItem"><a class="navlink" href="athletes.php">Athletes</a></li>
+    <li class="navItem"><a class="navlink"  href="coaches.php">Coaches</a></li>
+    <li class="navItem"><a class="active navlink"  href="teams.php">Teams</a></li>
+    <li class="navItem"><a class="navlink"  href="positions.php">Positions</a></li>
+  </ul>
+
+
+<br>
+
 <h1>All about athletes</h1>
 <p> Remember the following rules apply to athletes:</p>
 <ul>
@@ -146,6 +158,8 @@ $stmt->close();
 		<input type="submit" name="Update" value="Update Athlete" />
 	</form>
 
-
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 </body>
 </html>

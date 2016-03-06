@@ -32,6 +32,18 @@ if($mysqli->connect_errno){
 <html>
 <body>
 
+
+  <ul class="NavBar">
+    <li class="navItem"><a class="navlink" href="vbphp.php">Home</a></li>
+    <li class="navItem"><a class="navlink" href="athletes.php">Athletes</a></li>
+    <li class="navItem"><a class="navlink"  href="coaches.php">Coaches</a></li>
+    <li class="navItem"><a class="navlink"  href="teams.php">Teams</a></li>
+    <li class="navItem"><a class="active navlink"  href="positions.php">Positions</a></li>
+  </ul>
+
+
+<br>
+
 <h1>Current positions of player's and coaches</h1>
 <p> Remember the following applies to positions:</p>
 <ul>
@@ -44,14 +56,14 @@ if($mysqli->connect_errno){
 
 <div>
 	<table>
-		<tr>
+		<tr class="heading">
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Team Name </th>
 			<th> Position Type </th>
 		</tr>
 <?php
-if(!($stmt = $mysqli->prepare("SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c LEFT JOIN team_coach_setup tcs ON c.id = tcs.teamID Left Join position_coach_team pct ON
+if(!($stmt = $mysqli->prepare("SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c Left Join position_coach_team pct ON
 pct.coachID = c.id Left Join teams t on t.id = pct.teamID Left Join positions p ON p.id=pct.positionID Order By p.type desc")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -76,7 +88,7 @@ $stmt->close();
 
 <div>
 	<table>
-		<tr>
+		<tr class="heading">
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Team Name </th>
@@ -120,7 +132,7 @@ $stmt->close();
 
 		<fieldset>
 			<legend>Position</legend>
-			<select name="teamID">
+			<select name="positionID">
 <?php
 if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' "))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -168,6 +180,10 @@ $stmt->close();
 		<input type="submit" name="UpdateC" value="Update Coach Position" />
 	</form>
 </div>
+
+
+
+
 <br>
 <div class="formHeader">
 <h3>Add or Update Athlete Position</h3>
@@ -185,7 +201,7 @@ $stmt->close();
 			<legend>Position</legend>
 			<select name="teamID">
 <?php
-if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' "))){
+if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE type NOT IN ('Head Coach','Assistant Coach')"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
 
@@ -227,8 +243,8 @@ $stmt->close();
 		</select>
 		</fieldset>
 
-		<input type="submit" name="AddC" value="Add Coach" />
-		<input type="submit" name="UpdateC" value="Update Coach" />
+		<input type="submit" name="AddA" value="Add Athlete Position" />
+		<input type="submit" name="UpdateA" value="Update Coach Position" />
 	</form>
 
 </div>
@@ -239,7 +255,7 @@ $stmt->close();
 <h3>Table 3: Number of positions held by an athlete</h3>
 <div>
 	<table>
-		<tr>
+		<tr class="heading">
 			<th> First Name </th>
 			<th> Last Name </th>
 			<th> Positions Held </th>
@@ -268,7 +284,10 @@ $stmt->close();
 </div>
 
 <br><br>
-<br><br>
+<br>
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 
 </body>
 </html>

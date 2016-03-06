@@ -1,4 +1,3 @@
-
 SET FOREIGN_KEY_CHECKS =0;
 DROP TABLE IF EXISTS `athletes`;
 DROP TABLE IF EXISTS `athlete_position`;
@@ -36,14 +35,6 @@ CREATE TABLE `coaches` (
   `last_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT fname_lname_Unique_co UNIQUE (`first_name`, `last_name`)
-)ENGINE=InnoDB;
-
-CREATE TABLE `team_coach_setup` (
-  `teamID` int(11) NOT NULL ,
-  `coachID` int(11) NOT NULL ,
-  PRIMARY KEY (`teamID`, `coachID`),
-  CONSTRAINT coachID_on_coaches_tcs FOREIGN KEY (`coachID`) REFERENCES `coaches` (`id`),
-  CONSTRAINT teamID_on_teams_tcs FOREIGN KEY (`teamID`) REFERENCES `teams` (`id`)
 )ENGINE=InnoDB;
 
 CREATE TABLE `positions` (
@@ -149,14 +140,13 @@ insert into `athletes` (`first_name`,`last_name`,`age`,`teamID`) values
 ('Jonah', 'Felts', '11',(SELECT `id` FROM `teams` WHERE `name` = 'Dragons'));
 
 
-insert into `team_coach_setup` (`teamID`,`coachID`) values
-((SELECT `id` FROM `teams` WHERE `name` = 'Bears'), (SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND`last_name` = 'Linkin')),
-((SELECT `id` FROM `teams` WHERE `name` = 'Lions'), (SELECT `id` FROM `coaches` WHERE `first_name` = 'Marvin' AND`last_name` = 'Smith'));
-
 insert into `athlete_position` (`athleteID`,`positionID`) values
-((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Libero')),
-((SELECT `id` FROM `athletes` WHERE `first_name` = 'Peggy' AND `last_name` = 'Sue' ), (SELECT `id` FROM `positions` WHERE `type` = 'Setter')),
-((SELECT `id` FROM `athletes` WHERE `first_name` = 'Bobby' AND `last_name` = 'Joe' ), (SELECT `id` FROM `positions` WHERE `type` = 'Right Side'));
+(1,1), (2,2), (3,3), (4,4), (5,5), (6,6), (7,1), (1,2), (2,3),
+(8,4), (9,3), (10,3), (11,2), (12,1), (13,5), (8,6), (8,1), (10,5), 
+(14,3), (15,2), (16,2), (17,1), (18,6), (19,5), (20,6), (14,2), (17,2), 
+(21,6), (22,5), (23,4), (24,3), (25,2), (26,1), (27,2), (23,3), (25,4), 
+(28,4), (29,4), (30,3), (31,2), (32,1), (33,6), (34,5), (34,1), (32,3), 
+(35,2), (36,1), (37,2), (38,4), (39,3), (40,5), (41,6), (42,5), (42,1);
 
 insert into `position_coach_team` (`coachID`,`positionID`, `teamID`) values
 ((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Bears')),

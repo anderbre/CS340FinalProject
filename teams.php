@@ -158,6 +158,8 @@ $stmt->close();
 		<input type="submit" name="Update" value="Update Athlete" />
 	</form>
 
-
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 </body>
 </html>

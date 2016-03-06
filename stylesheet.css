@@ -40,6 +40,12 @@ h1 {
   color: darkred;
 }
 
+footer{
+  opacity:.5;
+  text-align: center;
+}
+
+
 .NavBar{
     list-style-type: none;
     margin: 0;

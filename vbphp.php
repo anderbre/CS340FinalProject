@@ -102,7 +102,9 @@ $stmt->close();
 ?>
 	</table>
 
-
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 
 </body>
 </ht

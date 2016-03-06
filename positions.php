@@ -132,7 +132,7 @@ $stmt->close();
 
 		<fieldset>
 			<legend>Position</legend>
-			<select name="teamID">
+			<select name="positionID">
 <?php
 if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' "))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -180,6 +180,10 @@ $stmt->close();
 		<input type="submit" name="UpdateC" value="Update Coach Position" />
 	</form>
 </div>
+
+
+
+
 <br>
 <div class="formHeader">
 <h3>Add or Update Athlete Position</h3>
@@ -197,7 +201,7 @@ $stmt->close();
 			<legend>Position</legend>
 			<select name="teamID">
 <?php
-if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' "))){
+if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE type NOT IN ('Head Coach','Assistant Coach')"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
 
@@ -239,8 +243,8 @@ $stmt->close();
 		</select>
 		</fieldset>
 
-		<input type="submit" name="AddC" value="Add Coach" />
-		<input type="submit" name="UpdateC" value="Update Coach" />
+		<input type="submit" name="AddA" value="Add Athlete Position" />
+		<input type="submit" name="UpdateA" value="Update Coach Position" />
 	</form>
 
 </div>
@@ -280,7 +284,10 @@ $stmt->close();
 </div>
 
 <br><br>
-<br><br>
+<br>
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 
 </body>
 </html>

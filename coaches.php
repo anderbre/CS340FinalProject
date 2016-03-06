@@ -162,5 +162,8 @@ document.getElementById("coach_name").onchange = function(){
 }
 </script>
 
+<br>
+<footer> Final Project by Brett Anderson and Joseph McMurrough</footer>
+<br>
 </body>
 </html>

@@ -149,6 +149,70 @@ insert into `athlete_position` (`athleteID`,`positionID`) values
 (35,2), (36,1), (37,2), (38,4), (39,3), (40,5), (41,6), (42,5), (42,1);
 
 insert into `position_coach_team` (`coachID`,`positionID`, `teamID`) values
-((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
-((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
-((SELECT `id` FROM `coaches` WHERE `first_name` = 'Marvin' AND `last_name` = 'Smith' ), (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), (SELECT `id` FROM `teams` WHERE `name` = 'Lions'));
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Phillip' AND `last_name` = 'Luckow' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Bears')),
+
+
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'John' AND `last_name` = 'Linkin' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Marvin' AND `last_name` = 'Smith' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Lions')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Linda' AND `last_name` = 'Debusk' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Prudence' AND `last_name` = 'Ryans' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Warriors')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Reinaldo' AND `last_name` = 'Durney' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Golda' AND `last_name` = 'Pixley' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Fire Breathing Rubber Duckies')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Zane' AND `last_name` = 'Seward' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Jon' AND `last_name` = 'Mahan' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Falcons')),
+
+
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Shay' AND `last_name` = 'Dutcher' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Head Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Katrina' AND `last_name` = 'Farrar' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Dragons')),
+
+((SELECT `id` FROM `coaches` WHERE `first_name` = 'Phil' AND `last_name` = 'Worrall' ), 
+  (SELECT `id` FROM `positions` WHERE `type` = 'Assistant Coach'), 
+  (SELECT `id` FROM `teams` WHERE `name` = 'Dragons'));
+
+
+
+
+
+
+
+
+
+
+
+

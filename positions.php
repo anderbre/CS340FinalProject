@@ -64,7 +64,7 @@ if($mysqli->connect_errno){
 		</tr>
 <?php
 if(!($stmt = $mysqli->prepare("SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c Left Join position_coach_team pct ON
-pct.coachID = c.id Left Join teams t on t.id = pct.teamID Left Join positions p ON p.id=pct.positionID Order By p.type desc")))
+pct.coachID = c.id Left Join teams t on t.id = pct.teamID Left Join positions p ON p.id=pct.positionID Order By p.type desc, t.name")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -83,45 +83,14 @@ $stmt->close();
 	</table>
 </div>
 
-<h3>Table 2: All positions held by each athlete, ordered by team</h3>
 
 
-<div>
-	<table>
-		<tr class="heading">
-			<th> First Name </th>
-			<th> Last Name </th>
-			<th> Team Name </th>
-			<th> Position Type </th>
-		</tr>
-<?php
-if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
-ap.athleteID = a.id Left JOIN positions p ON
-p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc")))
-{
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($fname, $lname,$tname, $type)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while($stmt->fetch()){
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>\n" . $type . "\n</td>\n</tr>";
-}
-$stmt->close();
-?>
-	</table>
-</div>
-<br>
 
 
 <div class="formHeader">
 <h3>Add or Update Coach Position</h3>
 <p>*Remeber a coach <i>should</i> not have more than one position per team.</p>
-<p>**To update, enter valid first and last name of pre-existing coach.</p>
+<p>**To update a position, enter valid first and last name of pre-existing coach, and the corresponding team for which position to update.</p>
 <form method="post" action="add_up_positions.php">
 
 		<fieldset>
@@ -184,22 +153,65 @@ $stmt->close();
 
 
 
+
+
+
+<h3>Table 2: All positions held by each athlete, ordered by team</h3>
+
+
+<div>
+	<table>
+		<tr class="heading">
+			<th> First Name </th>
+			<th> Last Name </th>
+			<th> Team Name </th>
+			<th> Position Type </th>
+		</tr>
+<?php
+if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
+ap.athleteID = a.id Left JOIN positions p ON
+p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc, a.last_name")))
+{
+	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+}
+
+if(!$stmt->execute()){
+	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+}
+if(!$stmt->bind_result($fname, $lname,$tname, $type)){
+	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+}
+while($stmt->fetch()){
+ echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>\n" . $type . "\n</td>\n</tr>";
+}
+$stmt->close();
+?>
+	</table>
+</div>
+<br>
+
+
+
+
+
+
+
 <br>
 <div class="formHeader">
-<h3>Add or Update Athlete Position</h3>
-<p>*Remeber a coach <i>should</i> not have more than one position per team.</p>
-<p>**To update, enter valid first and last name of pre-existing coach.</p>
+<h3>Add Athlete Position</h3>
+<p>*Remeber athletes only belong to one team, so no choice here.</p>
+<p>**We are only adding on additional positions for existing athlete.</p>
 <form method="post" action="add_up_positions.php">
 
 		<fieldset>
-			<legend>Coach Name</legend>
+			<legend>Athlete Name</legend>
 			<p>First Name: <input type="text" name="first_name" /></p>
 			<p>Last Name: <input type="text" name="last_name" /></p>
 		</fieldset>
 
 		<fieldset>
 			<legend>Position</legend>
-			<select name="teamID">
+			<select name="positionID">
 <?php
 if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE type NOT IN ('Head Coach','Assistant Coach')"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -221,30 +233,9 @@ $stmt->close();
 
 
 
-		<fieldset>
-			<legend>Team</legend>
-			<select name="teamID">
-<?php
-if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($id, $teamname)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while($stmt->fetch()){
-	echo '<option value=" '. $id . ' "> ' . $teamname . '</option>\n';
-}
-$stmt->close();
-?>
-		</select>
-		</fieldset>
+		
 
 		<input type="submit" name="AddA" value="Add Athlete Position" />
-		<input type="submit" name="UpdateA" value="Update Coach Position" />
 	</form>
 
 </div>

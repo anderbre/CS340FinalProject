@@ -22,6 +22,8 @@ if($mysqli->connect_errno){
 
 
 
+
+
 if(isset($_POST['AddC']))
 {
     $fname = $_POST['first_name'];
@@ -29,20 +31,6 @@ if(isset($_POST['AddC']))
     $positionID = $_POST['positionID'];
     $teamName= $_POST['teamID'];
 
-if(!$mysqli || $mysqli->connect_errno){
-  echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-  }
-
-if(!($stmt = $mysqli->prepare("INSERT INTO `coaches` (`first_name`,`last_name`) VALUES (?,?)"))){
-  echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-if(!($stmt->bind_param("ss",$fname , $lname))){
-  echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
-}
-if(!$stmt->execute()){
-  echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
-} else {
-  echo "Coach has been added to database.";}
 
 $coachIDquery = $mysqli->query("SELECT id FROM coaches WHERE first_name ='$fname' AND last_name='$lname'")->fetch_assoc();
 $coachID = $coachIDquery['id'];
@@ -70,10 +58,19 @@ if(!$stmt->execute()){
 else if(isset($_POST['UpdateC']))
 {
 
-if(!($updateQ = $mysqli->prepare("UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=? "))){
+    $fname = $_POST['first_name'];
+    $lname = $_POST['last_name'];
+    $positionID = $_POST['positionID'];
+    $teamName= $_POST['teamID'];
+
+
+$coachIDquery = $mysqli->query("SELECT id FROM coaches WHERE first_name ='$fname' AND last_name='$lname'")->fetch_assoc();
+$coachID = $coachIDquery['id'];
+
+if(!($updateQ = $mysqli->prepare("UPDATE position_coach_team SET positionID=? WHERE teamID=? AND coachID=?"))){
   echo "Prepare failed: "  . $updateQ->errno . " " . $updateQ->error;
 }
-if(!($updateQ->bind_param("iiss",$teamName , $age, $fname, $lname))){
+if(!($updateQ->bind_param("iii", $positionID,$teamName , $coachID))){
   echo "Bind failed: "  . $updateQ->errno . " " . $updateQ->error;
 }
 if(!$updateQ->execute()){
@@ -81,7 +78,7 @@ if(!$updateQ->execute()){
 } 
 else if($updateQ->affected_rows > 0)
 {
-  echo "Athlete age and team have been updated!";
+  echo "Coach position has been updated!";
 }
   else
   {
@@ -93,44 +90,25 @@ else if($updateQ->affected_rows > 0)
 
 else if(isset($_POST['AddA']))
 {
-    
-if(!$mysqli || $mysqli->connect_errno){
-  echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-  }
+    $fname = $_POST['first_name'];
+    $lname = $_POST['last_name'];
+    $positionID = $_POST['positionID'];
 
-if(!($stmt = $mysqli->prepare("INSERT INTO `athletes` (`first_name`,`last_name`,`age`,`teamID`) VALUES (?,?,?,?)"))){
+
+$athleteIDquery= $mysqli->query("SELECT id FROM athletes WHERE first_name ='$fname' AND last_name='$lname'")->fetch_assoc();
+$athleteID = $athleteIDquery['id'];
+
+
+if(!($stmt = $mysqli->prepare("INSERT INTO `athlete_position` (`athleteID`,`positionID`) VALUES (?,?)"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
-if(!($stmt->bind_param("ssii",$fname , $lname, $age, $teamName))){
+if(!($stmt->bind_param("ii",$athleteID , $positionID))){
   echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
 }
 if(!$stmt->execute()){
   echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
 } else {
-  echo "Athlete has been added to database.";}
-}
-
-else if(isset($_POST['UpdateA']))
-{
-
-if(!($updateQ = $mysqli->prepare("UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=? "))){
-  echo "Prepare failed: "  . $updateQ->errno . " " . $updateQ->error;
-}
-if(!($updateQ->bind_param("iiss",$teamName , $age, $fname, $lname))){
-  echo "Bind failed: "  . $updateQ->errno . " " . $updateQ->error;
-}
-if(!$updateQ->execute()){
-  echo "Execute failed: "  . $updateQ->errno . " " . $updateQ->error;
-} 
-else if($updateQ->affected_rows > 0)
-{
-  echo "Athlete age and team have been updated!";
-}
-  else
-  {
-    echo "No rows affected, please enter the first name and last of current athlete to update.";
-  }
-
+  echo "  Athlete position has been added to database.";}
 
 }
 

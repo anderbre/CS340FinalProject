@@ -62,14 +62,6 @@ if($mysqli->connect_errno){
 <img src="VBschema.png" alt="See VBschema.png" style="width:400;height:400;">
 <br>
 
-<h4>Links to different page:</h4>
-<br>
-	<ul>
-		<li><a href="athletes.php">Athlete Information</a></li>
-		<li><a href="coaches.php">Coaches Information</a></li>
-		<li><a href="teams.php">Team Information</a></li>
-		<li><a href="positions.php">Position Information</a></li>
-	</ul>
 
 <table class="data_display">
 		<label> Athletes </label>

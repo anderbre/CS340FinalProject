@@ -45,12 +45,9 @@ if($mysqli->connect_errno){
 <br>
 
 <h1>All about Teams</h1>
-<p> Remember the following rules apply to athletes:</p>
-<ul>
-	<li>Athletes can only belong to one team.</li>
-	<li>Athletes can have multiple positions.</li>
-</ul>
-<h3>Table 1: Athlete name, team, and number of positions held </h3>
+<p> Teams have names, age groups and a level of the team. Top team is 1, second best is 2...</p>
+<p> The team age group and level should be unique, but names can be duplicated. Although, duplicating
+  a team name is pretty lame.</p>
 
 <div>
 	<table id="team_table">
@@ -85,7 +82,8 @@ $stmt->close();
 
 <br>
 <h3>Update or Add Team</h3>
-
+<p>To Add a team, enter the team name, select their age group, and designate their level within the club. When done, click submit.</p>
+<p>To update a team, check the update box, and select the team name from the drop down list. Edit anything you wish, and click submit.</p>
 
 <form method="post" action="add_up_team.php">
   <input type="checkbox" name="type" value="update" id="formType">Update

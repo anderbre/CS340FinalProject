@@ -42,7 +42,7 @@ if($mysqli->connect_errno){
 <p> Remember the following rules apply to coaches:</p>
 <ul>
 	<li>Coaches can belong to more than one team.</li>
-	<li>coaches can have multiple positions, but only one per team.</li>
+	<li>Coaches can have multiple positions, but only one per team.</li>
 </ul>
 <h3>Table 1: Coach name, team, and position held </h3>
 
@@ -81,8 +81,12 @@ $stmt->close();
 </div>
 
 <br>
-<h3>Update or Add Coach</h3>
-
+<h3>Add or update coaches</h3>
+<p>To add a coach, simply enter a first and last name. Then click Submit.
+  To update a coach, check the update button, and then select the coach's name
+  from the drop down box. Make any changes to the name, and click submit.</p>
+<p>Coaches positions on teams will be added on the <a href=positions.php>Positions</a>
+  page.</p>
 
 <form method="post" action="add_up_coach.php">
   <input type="checkbox" name="type" value="update" id="formType">Update

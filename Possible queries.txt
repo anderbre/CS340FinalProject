@@ -20,10 +20,32 @@ Potential queries for final project:
 
 
 
+-- COACHES.PHP QUERIES --
+1. SELECT id, first_name, last_name FROM coaches ORDER BY last_name
+2. SELECT coaches.first_name, coaches.last_name, teams.name, teams.age_group, teams.level, positions.type
+FROM coaches LEFT JOIN position_coach_team ON position_coach_team.coachID = coaches.id
+LEFT JOIN positions ON positions.id = position_coach_team.positionID
+LEFT JOIN teams ON position_coach_team.teamID = teams.id
+ORDER BY teams.age_group DESC
 
+-- ADD_UP_COACH.PHP --
+1. UPDATE coaches SET first_name=?, last_name=? WHERE id=?
+2. INSERT INTO `coaches` (`first_name`,`last_name`) VALUES (?,?)
+
+-- TEAMS.PHP --
+1. SELECT teams.name, teams.age_group, teams.level,  COUNT(athletes.id) AS players FROM teams
+LEFT JOIN athletes ON athletes.teamID = teams.id
+GROUP BY teams.name
+ORDER BY teams.age_group DESC, teams.level ASC
+
+-- ADD_UP_TEAM.PHP --
+1. UPDATE teams SET name=?, age_group=?, level=? WHERE id=?
+2. INSERT INTO `teams` (`name`,`age_group`, `level`) VALUES (?,?,?)
+
+2. SELECT id, name, age_group, level FROM teams ORDER BY age_group DESC, level ASC
 -- ATHLETES.PHP QUERIES --
 
-1. Selects althete: first name + last name + age, team: name 
+1. Selects althete: first name + last name + age, team: name
 
 SELECT a.first_name, a.last_name, a.age, t.name FROM athletes a INNER JOIN teams t ON a.teamID = t.id ORDER BY t.name,a.last_name
 
@@ -46,7 +68,7 @@ INSERT INTO `athletes` (`first_name`,`last_name`,`age`,`teamID`) VALUES (?,?,?,?
 
 2.  Updates team and age based on user input first name and last name combination
 
-UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=? 
+UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=?
 
 
 -- POSITIONS.PHP QUERIES --
@@ -64,7 +86,7 @@ p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc, a.l
 
 3.  DROP DOWN LIST: --Coach's Positions--
 
-SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' 
+SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach'
 
 4.  DROP DOWN LIST: --Athlete's Positions--
 SELECT id, type FROM positions WHERE type NOT IN ('Head Coach','Assistant Coach')
@@ -72,8 +94,8 @@ SELECT id, type FROM positions WHERE type NOT IN ('Head Coach','Assistant Coach'
 5. Number of positions held by an athlete
 
 SELECT a.first_name, a.last_name, COUNT(p.type) AS Positions_Held FROM athletes a LEFT JOIN teams t ON a.teamID = t.id LEFT JOIN
-athlete_position ap ON ap.athleteID = a.id LEFT JOIN 
-positions p ON p.id = ap.positionID 
+athlete_position ap ON ap.athleteID = a.id LEFT JOIN
+positions p ON p.id = ap.positionID
 GROUP BY a.first_name, a.last_name ORDER BY a.last_name asc
 
 
@@ -96,14 +118,6 @@ GROUP BY a.first_name, a.last_name ORDER BY a.last_name asc
 1. (Used to be on athlete page) Selects althete: first name + last name + age, team: name + age_group, COUNTS how many positions held.  Note: uses aggregate function
 
 SELECT a.first_name, a.last_name, a.age, t.name, t.age_group, COUNT(p.type) AS Positions_Held FROM athletes a INNER JOIN teams t ON a.teamID = t.id INNER JOIN
-athlete_position ap ON ap.athleteID = a.id INNER JOIN 
-positions p ON p.id = ap.positionID 
+athlete_position ap ON ap.athleteID = a.id INNER JOIN
+positions p ON p.id = ap.positionID
 GROUP BY a.first_name, a.last_name, a.age, t.name, t.age_group
-
-
-
-
-
-
-
-

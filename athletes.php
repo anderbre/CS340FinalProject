@@ -61,6 +61,7 @@ if($mysqli->connect_errno){
 			<th> Team Name </th>
 		</tr>
 <?php
+//Table 1: Displays athlete first name last name, age, team name ordered by team name ascending, then by athlete last name ascending
 if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, a.age, t.name FROM athletes a INNER JOIN teams t ON a.teamID = t.id ORDER BY t.name,a.last_name")))
 {
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
@@ -72,6 +73,7 @@ if(!$stmt->execute()){
 if(!$stmt->bind_result($fname, $lname, $age, $tname)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+//table input of query
 while($stmt->fetch()){
  echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $age . "\n</td>\n<td>"  . $tname . "\n</td>\n</tr>";
 }
@@ -92,6 +94,7 @@ $stmt->close();
 			<th> Position Type </th>
 		</tr>
 <?php
+//Table 2: All positions held by each athlete, orded by team
 if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
 ap.athleteID = a.id Left JOIN positions p ON
 p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc, a.last_name")))
@@ -135,6 +138,7 @@ $stmt->close();
 			<legend>Athlete's Team</legend>
 			<select name="teamID">
 <?php
+//Generates a list of athlete team names, grabs id as well to store.
 if(!($stmt = $mysqli->prepare("SELECT id, name FROM teams"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }

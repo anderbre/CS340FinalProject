@@ -22,16 +22,37 @@ if($mysqli->connect_errno){
 
 
 
+if(isset($_POST['AddP']))
+  //Adds new position
+{
+    $positionName = $_POST['pName'];
+
+
+if(!($stmt = $mysqli->prepare("INSERT INTO `positions` (`type`) VALUES (?)"))){
+  echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+}
+if(!($stmt->bind_param("s", $positionName))){
+  echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
+}
+if(!$stmt->execute()){
+  echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
+} else {
+  echo " Position has been added to database.";}
+
+
+
+}
 
 
 if(isset($_POST['AddC']))
+  //Adds new coach position
 {
     $fname = $_POST['first_name'];
     $lname = $_POST['last_name'];
     $positionID = $_POST['positionID'];
     $teamName= $_POST['teamID'];
 
-
+//Finds id of coach based on user input of first name and last name
 $coachIDquery = $mysqli->query("SELECT id FROM coaches WHERE first_name ='$fname' AND last_name='$lname'")->fetch_assoc();
 $coachID = $coachIDquery['id'];
 
@@ -56,6 +77,7 @@ if(!$stmt->execute()){
 
 
 else if(isset($_POST['UpdateC']))
+  //Will update coach position
 {
 
     $fname = $_POST['first_name'];
@@ -63,10 +85,11 @@ else if(isset($_POST['UpdateC']))
     $positionID = $_POST['positionID'];
     $teamName= $_POST['teamID'];
 
-
+//Finds id of coach based on user input of first name and last name
 $coachIDquery = $mysqli->query("SELECT id FROM coaches WHERE first_name ='$fname' AND last_name='$lname'")->fetch_assoc();
 $coachID = $coachIDquery['id'];
 
+//updates coaches position based on team id and coach id
 if(!($updateQ = $mysqli->prepare("UPDATE position_coach_team SET positionID=? WHERE teamID=? AND coachID=?"))){
   echo "Prepare failed: "  . $updateQ->errno . " " . $updateQ->error;
 }
@@ -89,16 +112,17 @@ else if($updateQ->affected_rows > 0)
 }
 
 else if(isset($_POST['AddA']))
+  //adds an athlete position
 {
     $fname = $_POST['first_name'];
     $lname = $_POST['last_name'];
     $positionID = $_POST['positionID'];
 
-
+//finds id of athlete based on user first name and last name entry
 $athleteIDquery= $mysqli->query("SELECT id FROM athletes WHERE first_name ='$fname' AND last_name='$lname'")->fetch_assoc();
 $athleteID = $athleteIDquery['id'];
 
-
+//insert new position for existing athlete, based on athlete id and position id
 if(!($stmt = $mysqli->prepare("INSERT INTO `athlete_position` (`athleteID`,`positionID`) VALUES (?,?)"))){
   echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }

@@ -54,6 +54,20 @@ if($mysqli->connect_errno){
 </ul>
 <h3>Table 1: Coach positions and team by position type </h3>
 
+<form method="post" action="add_up_positions.php">
+
+		<fieldset>
+			<legend>Add Position</legend>
+			<p>Position Name: <input type="text" name="pName" /></p>
+		</fieldset>
+
+
+		<input type="submit" name="AddP" value="Add Position" />
+	</form>
+
+<br>
+
+
 <div>
 	<table>
 		<tr class="heading">
@@ -63,6 +77,8 @@ if($mysqli->connect_errno){
 			<th> Position Type </th>
 		</tr>
 <?php
+//  Query for first table, gets all coach positions and order by position type
+//descending then by team name.
 if(!($stmt = $mysqli->prepare("SELECT c.first_name, c.last_name, t.name, p.type FROM coaches c Left Join position_coach_team pct ON
 pct.coachID = c.id Left Join teams t on t.id = pct.teamID Left Join positions p ON p.id=pct.positionID Order By p.type desc, t.name")))
 {
@@ -75,13 +91,14 @@ if(!$stmt->execute()){
 if(!$stmt->bind_result($fname, $lname, $tname, $ptype)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+//Imputers the data into table format
 while($stmt->fetch()){
  echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $tname . "\n</td>\n<td>"  . $ptype . "\n</td>\n</tr>";
 }
 $stmt->close();
 ?>
 	</table>
-</div>f
+</div>
 
 
 
@@ -103,6 +120,7 @@ $stmt->close();
 			<legend>Position</legend>
 			<select name="positionID">
 <?php
+//Generates list of positions for coach, head coach or assistant
 if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE positions.type = 'Head Coach' OR positions.type = 'Assistant Coach' "))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -110,11 +128,13 @@ if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE positions.ty
 if(!$stmt->execute()){
 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
-if(!$stmt->bind_result($id, $teamname)){
+if(!$stmt->bind_result($id, $ptype)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+//Puts the results in the option tag, with id stored in the value and the
+// position in the text info field
 while($stmt->fetch()){
-	echo '<option value=" '. $id . ' "> ' . $teamname . '</option>\n';
+	echo '<option value=" '. $id . ' "> ' . $ptype . '</option>\n';
 }
 $stmt->close();
 ?>
@@ -168,6 +188,8 @@ $stmt->close();
 			<th> Position Type </th>
 		</tr>
 <?php
+//  Table 2:  gets first name last name, team name, and position type for all positions held by athletes
+//Order by team name ascending, then last name ascending.
 if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, t.name, p.type FROM athletes a Left JOIN athlete_position ap ON
 ap.athleteID = a.id Left JOIN positions p ON
 p.id = ap.positionID Left Join teams t ON a.teamID=t.id Order By t.name asc, a.last_name")))
@@ -213,6 +235,7 @@ $stmt->close();
 			<legend>Position</legend>
 			<select name="positionID">
 <?php
+//List all athlete's positions
 if(!($stmt = $mysqli->prepare("SELECT id, type FROM positions WHERE type NOT IN ('Head Coach','Assistant Coach')"))){
 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 }
@@ -252,6 +275,7 @@ $stmt->close();
 			<th> Positions Held </th>
 		</tr>
 <?php
+//Table 3:  Gets a count on number of positions held by athletes even if 0
 if(!($stmt = $mysqli->prepare("SELECT a.first_name, a.last_name, COUNT(p.type) AS Positions_Held FROM athletes a LEFT JOIN teams t ON a.teamID = t.id LEFT JOIN
 athlete_position ap ON ap.athleteID = a.id LEFT JOIN 
 positions p ON p.id = ap.positionID 

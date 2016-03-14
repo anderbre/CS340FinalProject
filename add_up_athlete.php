@@ -26,11 +26,12 @@ if($mysqli->connect_errno){
     $teamName= $_POST['teamID'];
 
 if(isset($_POST['Add']))
+  //Add new athlete
 {
   if(!$mysqli || $mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
   }
-
+//Inserts new athlete based on user input first name, last name, age, and team name.
   if(!($stmt = $mysqli->prepare("INSERT INTO `athletes` (`first_name`,`last_name`,`age`,`teamID`) VALUES (?,?,?,?)"))){
     echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
   }
@@ -43,6 +44,8 @@ if(isset($_POST['Add']))
     echo "Athlete has been added to database.";}
 } else
 {
+  //Updates existing athlete based upon user entry first name and last name
+  //Updates the team and age fields
   if(!($updateQ = $mysqli->prepare("UPDATE athletes SET teamID=?, age=? WHERE first_name=?  AND last_name=? "))){
     echo "Prepare failed: "  . $updateQ->errno . " " . $updateQ->error;
   }

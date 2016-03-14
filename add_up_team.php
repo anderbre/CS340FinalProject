@@ -15,7 +15,7 @@ if (file_exists("brett")){
   $dbuser = 'mcmurroj-db';
   $dbpass = 'uHM64jmm6DzuW1qr';
 }
-
+// prepare the database connection
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;}
@@ -25,10 +25,14 @@ if($mysqli->connect_errno){
     $level = $_POST['teamlevel'];
     $teamid = $_POST['team_id'];
 
-echo "<pre>"; print_r($_POST); echo "</pre>";
+//echo "<pre>"; print_r($_POST); echo "</pre>";
+
+// next, execute the query based on if it is an update or an insert.
+
+// if type is set, then this is an update request.
 if(isset($_POST['type'])) // updting if type is set
 {
-  // update coach
+  // update team
   if(!($updateQ = $mysqli->prepare("UPDATE teams SET name=?, age_group=?, level=? WHERE id=? "))){
     echo "Prepare failed: "  . $updateQ->errno . " " . $updateQ->error;
   }
@@ -47,7 +51,7 @@ if(isset($_POST['type'])) // updting if type is set
     echo "No rows affected, please enter the first name and last of current athlete to update.";
   }
 } else
-{
+{ // type is not set, so we are adding a team.
   if(!$mysqli || $mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
   }

@@ -14,7 +14,7 @@ if (file_exists("brett")){
   $dbuser = 'mcmurroj-db';
   $dbpass = 'uHM64jmm6DzuW1qr';
 }
-
+// prepare the database connection object.
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
@@ -46,7 +46,7 @@ if($mysqli->connect_errno){
 
 <h1>All about Teams</h1>
 <p> Teams have names, age groups and a level of the team. Top team is 1, second best is 2...</p>
-<p> The team age group and level should be unique, but names can be duplicated. Although, duplicating
+<p> The team age group and level should be unique, but do not have to be. Team names must be unique, because duplicating
   a team name is pretty lame.</p>
 
 <div>
@@ -58,6 +58,7 @@ if($mysqli->connect_errno){
       <th> Players </th>
 		</tr>
 <?php
+// prepare the query to select the teams, including a count of all athletes on the team.
 if(!($stmt = $mysqli->prepare("SELECT teams.name, teams.age_group, teams.level,  COUNT(athletes.id) AS players FROM teams
 LEFT JOIN athletes ON athletes.teamID = teams.id
 GROUP BY teams.name
@@ -72,6 +73,7 @@ if(!$stmt->execute()){
 if(!$stmt->bind_result($tname, $tage, $tlevel, $playercount)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+// add rows for each of the rows returned.
 while($stmt->fetch()){
  echo "<tr>\n<td>" . $tname . "</td>\n<td>" . $tage . "</td>\n<td>" . $tlevel . "</td>\n<td>"  . $playercount . "</td>\n</tr>";
 }
@@ -100,6 +102,7 @@ $stmt->close();
     if(!$stmt->bind_result($id, $name, $age, $level)){
     	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
     }
+    // populate the drop down menu with the names.
     while($stmt->fetch()){
     	echo '<option value=" '. $id .'">'.$name.'</option>';
     }
@@ -125,6 +128,9 @@ $stmt->close();
 	</form>
 
 <script type="text/javascript">
+// The js exists to make the page cleaner and dynamic.
+// in short, it changes the form between update and insert.
+// if updating, it pre-fills the form when you select from the drop down.
 document.getElementById("formType").onchange = function(){
   if (this.checked){
     document.getElementById("team_name").style.visibility = "visible";

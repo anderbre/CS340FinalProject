@@ -46,11 +46,20 @@ if($mysqli->connect_errno){
 <h1>Final Project: Volleyball Database</h1>
 <br>
 <br>
-<h3>About VollyBall</h3>
+<h3>About VolleyBall</h3>
 
-<p>This is some general information about Vollyball.
-	Here we can detail positions types, relationship contraints (i.e coaches can coach more than one team...)
+<p>This website is a generic interface for a juniors' club volleybal database.
+  The database consits of coache, athletes and teams. There is a page to add and update
+  any of the main entities, and a page to add or update the positions of each. Please refer to the schema or ER diagram
+  to see what conects to what.
 </p>
+<ul>Some constraints!
+  <li>Team names must be unique</li>
+  <li>A coach's first and last name combination must be unique</li>
+</ul>
+<p>It is not a constraint that a player or coach can not be on two or more teams. This happens.
+  It is also not a database constraint on age groups and ages. There can be exceptions to this,
+  so we chose not to enforce it at that level</p>
 
 
 
@@ -64,7 +73,7 @@ if($mysqli->connect_errno){
 
 
 <table class="data_display">
-		<label> Athletes </label>
+		<label>Example table: Athletes </label>
 		<tr class="heading">
 			<th>First Name</th>
 			<th>Last Name</th>

@@ -2,7 +2,7 @@
 //Turn on error reporting
 ini_set('display_errors', 'On');
 //Connects to the database
-
+// check if we are on Bret or Joseph's page
 if (file_exists("brett")){
   $dbhost = 'oniddb.cws.oregonstate.edu';
   $dbname = 'anderbre-db';
@@ -14,7 +14,7 @@ if (file_exists("brett")){
   $dbuser = 'mcmurroj-db';
   $dbpass = 'uHM64jmm6DzuW1qr';
 }
-
+// create new mysqli object
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
@@ -57,6 +57,7 @@ if($mysqli->connect_errno){
       <th> Position </th>
 		</tr>
 <?php
+// create sql query to grab al coaches, team names and such
 if(!($stmt = $mysqli->prepare("SELECT coaches.first_name, coaches.last_name, teams.name, teams.age_group, teams.level, positions.type
 FROM coaches LEFT JOIN position_coach_team ON position_coach_team.coachID = coaches.id
 LEFT JOIN positions ON positions.id = position_coach_team.positionID
@@ -72,6 +73,7 @@ if(!$stmt->execute()){
 if(!$stmt->bind_result($fname, $lname, $tname, $ageGroup, $level, $pos)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+// take the results, and build a row for the table form the bound variables
 while($stmt->fetch()){
  echo "<tr>\n<td>" . $fname . "</td>\n<td>" . $lname . "</td>\n<td>" . $tname . "</td>\n<td>" . $ageGroup. "</td>\n<td>" . $level . "</td>\n<td>" . $pos . "</td>\n</tr>";
 }
@@ -87,12 +89,13 @@ $stmt->close();
   from the drop down box. Make any changes to the name, and click submit.</p>
 <p>Coaches positions on teams will be added on the <a href=positions.php>Positions</a>
   page.</p>
-
+<!-- create form to transmit data -->
 <form method="post" action="add_up_coach.php">
   <input type="checkbox" name="type" value="update" id="formType">Update
   <select name=coachToUpdate id="coach_name" style="visibility: hidden">
     <option value="-1">Select a coach</option>
     <?php
+    // prepare sql query for loading the option drop down
     if(!($stmt = $mysqli->prepare("SELECT id, first_name, last_name FROM coaches ORDER BY last_name"))){
     	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
     }
@@ -119,6 +122,9 @@ $stmt->close();
 	</form>
 
 <script type="text/javascript">
+// The js is to make the page a litle cleaner and dynamic.
+// In a nutshell, it hides or shows the drop down. Then, if you
+// select a name from the drop down, it pre-fills the form.
 document.getElementById("formType").onchange = function(){
   if (this.checked){
     document.getElementById("coach_name").style.visibility = "visible";

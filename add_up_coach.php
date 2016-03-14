@@ -15,7 +15,7 @@ if (file_exists("brett")){
   $dbuser = 'mcmurroj-db';
   $dbpass = 'uHM64jmm6DzuW1qr';
 }
-
+// prepare the database connection object.
 $mysqli = new mysqli($dbhost,$dbname,$dbpass,$dbuser);
 if($mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;}
@@ -25,7 +25,7 @@ if($mysqli->connect_errno){
     $coachid = $_POST['coach_id'];
 
 
-
+// what type of submission did we get? If a type object is present, then we are updating.
 if(isset($_POST['type'])) // updting if type is set
 {
   // update coach
@@ -38,6 +38,7 @@ if(isset($_POST['type'])) // updting if type is set
   if(!$updateQ->execute()){
     echo "Execute failed: "  . $updateQ->errno . " " . $updateQ->error;
   }
+  // affected rows will be positive if the query succeded in updating.
   else if($updateQ->affected_rows > 0)
   {
     echo "Coach updated!";
@@ -47,11 +48,11 @@ if(isset($_POST['type'])) // updting if type is set
     echo "No rows affected, please enter the first name and last of current athlete to update.";
   }
 } else
-{
+{ // no type object, so we are adding a coach
   if(!$mysqli || $mysqli->connect_errno){
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
   }
-
+  // prepare the insert query
   if(!($stmt = $mysqli->prepare("INSERT INTO `coaches` (`first_name`,`last_name`) VALUES (?,?)"))){
     echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
   }
